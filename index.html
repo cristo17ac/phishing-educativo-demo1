@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulación educativa — Phishing</title>
+  <style>
+    :root{--bg:#f3f6fb;--card:#fff;--accent:#1f6feb;--danger:#c43a31}
+    body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+    .wrap{max-width:920px;width:100%;display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+    .panel{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(20,30,50,.06)}
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 12px;color:#444}
+    .login{padding:18px;border-radius:8px;border:1px solid #eef2f7}
+    label{display:block;margin:10px 0 6px;font-size:13px;color:#333}
+    input{width:100%;padding:10px;border:1px solid #d7dde6;border-radius:8px;font-size:14px}
+    button{width:100%;margin-top:12px;padding:10px;border:0;border-radius:8px;background:var(--accent);color:#fff;font-weight:600;cursor:pointer}
+    .warning{background:#fff4e6;border-left:4px solid #ffb74d;padding:10px;border-radius:8px;margin-bottom:12px}
+    ul{margin:8px 0 0;padding-left:18px;color:#333}
+    .note{font-size:13px;color:#666;margin-top:10px}
+    .result{margin-top:12px;padding:10px;border-radius:8px;background:#eef7ff;border:1px solid #d5e9ff;display:none}
+    footer{font-size:13px;color:#666;margin-top:12px;text-align:center}
+    @media (max-width:900px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Left: explanation -->
+    <div class="panel">
+      <h1>Demostración educativa: por qué funciona el phishing</h1>
+      <p class="lead">Esta página simula una página de inicio de sesión para<strong> mostrar señales</strong>y enseñar a no caer en ataques. <b>No captura ni envía credenciales.</b></p>
+
+      <div class="warning">
+        ⚠️ <strong>AVISO IMPORTANTE:</strong> Simulación educativa. <em>No introduzcas contraseñas reales.</em>
+      </div>
+
+      <h3>Señales comunes de phishing</h3>
+      <ul>
+        <li>URL que no coincide exactamente con el dominio oficial.</li>
+        <li>Falta de HTTPS o certificado inválido (comprueba el candado del navegador).</li>
+        <li>Errores de ortografía o diseño pobre en la página.</li>
+        <li>Solicitudes urgentes (p. ej. “tu cuenta será cerrada ahora”).</li>
+        <li>Enlaces acortados o dominios extraños (ej: sustituciones de letras).</li>
+      </ul>
+
+      <h3 style="margin-top:14px">Cómo usar esta demo</h3>
+      <ol>
+        <li>Muestra la URL en pantalla y pide que inspeccionen el dominio.</li>
+        <li>Deja que intenten “iniciar sesión” (no se envía nada).</li>
+        <li>Muestra la explicación y analiza las señales visibles.</li>
+      </ol>
+
+      <div class="note">Si quieres que la audiencia vea la diferencia, abre también la web real del servicio (en otra pestaña) y compara la URL y el certificado.</div>
+
+      <footer>Material de formación — uso responsable y con permiso.</footer>
+    </div>
+
+    <!-- Right: fake login -->
+    <div class="panel login" aria-labelledby="logintitle">
+      <h2 id="logintitle" style="margin:0 0 6px">Inicio de sesión</h2>
+      <p style="margin:0 0 12px;color:#555">Introduce datos de prueba para ver la simulación (no se almacenan).</p>
+
+      <form id="f" onsubmit="event.preventDefault(); simulate();">
+        <label for="u">Usuario</label>
+        <input id="u" autocomplete="off" placeholder="usuario@ejemplo.com" />
+        <label for="p">Contraseña</label>
+        <input id="p" type="password" autocomplete="off" placeholder="********" />
+        <button type="submit">Iniciar sesión</button>
+      </form>
+
+      <div id="result" class="result" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    function simulate(){
+      // No network, no logs: todo es local
+      const user = document.getElementById('u').value || '[usuario vacio]';
+      const r = document.getElementById('result');
+      r.style.display = 'block';
+      r.innerHTML = `
+        <strong>Simulación completada</strong>
+        <p style="margin:6px 0 0">Has ingresado: <code>${escapeHtml(user)}</code></p>
+        <p style="margin:8px 0 0"><b>Explicación:</b> Esta página es una <em>demostración</em>. Un sitio de phishing real podría redirigir las credenciales a un servidor malicioso. Observa la URL y las señales explicadas en la otra columna.</p>
+        <p style="margin:8px 0 0"><em>Sugerencia:</em> pide a los usuarios que comprueben el dominio y el candado HTTPS antes de escribir.</p>
+      `;
+      // No fetch, no envío, nada a servidores
+    }
+
+    function escapeHtml(s){
+      return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    }
+  </script>
+</body>
+</html>
